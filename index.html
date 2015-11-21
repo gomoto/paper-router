@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="paperRouter">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <title>Paper Router</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.min.js"></script>
+  <base href="/">
+  <script>
+    angular.module('paperRouter', [
+      'ui.router'
+    ]);
+    angular.module('paperRouter').config(appConfig);
+    function appConfig($stateProvider, $locationProvider, $urlRouterProvider) {
+      $stateProvider
+      .state('one', {
+        url: '/one',
+        templateUrl: 'one.html',
+        controller: 'OneController',
+        controllerAs: 'one',
+      })
+      .state('one.two', {
+        url: '/two',
+        templateUrl: 'two.html',
+        controller: 'TwoController',
+        controllerAs: 'two',
+      })
+      .state('one.two.three', {
+        url: '/three',
+        templateUrl: 'three.html',
+        controller: 'ThreeController',
+        controllerAs: 'three',
+      });
+      $locationProvider.html5Mode(true);
+      $urlRouterProvider.otherwise('/one');
+    }
+    angular.module('paperRouter').controller('MainController', function MainController($state, $scope) {
+      var main = this;
+      $scope.$on('$stateChangeSuccess', function(event, toState, toParams, fromState, fromParams){
+        main.currentState = toState.name;
+      });
+    });
+    angular.module('paperRouter').controller('OneController', function OneController() {
+
+    });
+    angular.module('paperRouter').controller('TwoController', function TwoController() {
+
+    });
+    angular.module('paperRouter').controller('ThreeController', function ThreeController() {
+
+    });
+  </script>
+  <script type="text/ng-template" id="one.html">
+    <div class="one box">
+      <a ui-sref="one.two">Two</a>
+      <div ui-view></div>
+    </div>
+  </script>
+  <script type="text/ng-template" id="two.html">
+    <div class="two box">
+      <a ui-sref="one">One</a>
+      <a ui-sref="one.two.three">Three</a>
+      <div ui-view></div>
+    </div>
+  </script>
+  <script type="text/ng-template" id="three.html">
+    <div class="three box">
+      <a ui-sref="one.two">Two</a>
+    </div>
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,500" rel="stylesheet" type="text/css">
+  <style>
+    /*Some basic styles to get started*/
+    html, body, div, span, applet, object, iframe,
+    h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+    a, abbr, acronym, address, big, cite, code,
+    del, dfn, em, img, ins, kbd, q, s, samp,
+    small, strike, strong, sub, sup, tt, var,
+    b, u, i, center,
+    dl, dt, dd, ol, ul, li,
+    fieldset, form, label, legend,
+    table, caption, tbody, tfoot, thead, tr, th, td,
+    article, aside, canvas, details, embed,
+    figure, figcaption, footer, header, hgroup,
+    menu, nav, output, ruby, section, summary,
+    time, mark, audio, video {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline;
+    }
+    /* HTML5 display-role reset for older browsers */
+    article, aside, details, figcaption, figure,
+    footer, header, hgroup, menu, nav, section {
+      display: block;
+    }
+    /* Own styles */
+    body {
+      font-family: Roboto, sans-serif;
+      font-weight: 400;
+      font-size: 14px;
+      color: #21252b;
+      line-height: 1;
+    }
+    .box {
+      background: white;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+    .one {
+      background: #e01764;
+    }
+    .two {
+      background: #70cadb;
+    }
+    .three {
+      background: #e08022;
+    }
+    @media (min-width: 600px) {
+      .box {
+        position: fixed;
+      }
+      .state-one .one {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .state-two .one {
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 50%;
+      }
+      .state-three .one {
+        top: 0;
+        left: 0;
+        right: 50%;
+        bottom: 50%;
+      }
+      .two {
+        top: 50%;
+        left: 0;
+        right: 0;
+        bottom: 0;
+      }
+      .three {
+        top: 0;
+        left: 50%;
+        right: 0;
+        bottom: 50%;
+      }
+    }
+  </style>
+</head>
+<body ng-controller="MainController as main">
+  <div ui-view ng-class="{
+    'state-one': main.currentState === 'one',
+    'state-two': main.currentState === 'one.two',
+    'state-three': main.currentState === 'one.two.three'
+  }"></div>
+</body>
+</html>
